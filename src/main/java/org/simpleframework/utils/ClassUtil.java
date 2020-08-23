@@ -72,7 +72,7 @@ public class ClassUtil {
             }
 
             private Class<?> generateClass(String absolutePath) throws ClassNotFoundException {
-                String replacePath = absolutePath.replaceAll("\\\\", "\\.");
+                String replacePath = absolutePath.replaceAll(File.separator, "\\.");
                 int indexOf = replacePath.indexOf(packageName);
                 String targetClassPackageName = replacePath.substring(indexOf, replacePath.length() - CLASS_SUFFIX.length());
                 return Class.forName(targetClassPackageName);
