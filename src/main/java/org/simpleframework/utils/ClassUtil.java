@@ -2,6 +2,8 @@ package org.simpleframework.utils;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -92,6 +94,34 @@ public class ClassUtil {
      */
     public static ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
+    }
+
+    /**
+     * 实例化类
+     *
+     * @param target 要被实例化的类
+     * @return
+     */
+    public static Object newInstance(Class<?> target) {
+        return newInstance(target, true);
+    }
+
+    /**
+     * 实例化类
+     *
+     * @param target     要被实例化的类
+     * @param accessible 访问权限
+     * @return
+     */
+    public static Object newInstance(Class<?> target, boolean accessible) {
+        try {
+            Constructor<?> constructor = target.getDeclaredConstructor();
+            constructor.setAccessible(accessible);
+            return constructor.newInstance();
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public static void main(String[] args) {

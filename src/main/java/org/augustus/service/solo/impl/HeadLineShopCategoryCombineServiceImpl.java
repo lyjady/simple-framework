@@ -7,6 +7,7 @@ import org.augustus.entity.dto.Result;
 import org.augustus.service.combine.HeadLineShopCategoryCombineService;
 import org.augustus.service.solo.HeadLineService;
 import org.augustus.service.solo.ShopCategoryService;
+import org.simpleframework.core.annotation.Service;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author LinYongJin
  * @date 2020/8/13 11:05
  */
+@Service
 public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
 
     private HeadLineService headLineService;

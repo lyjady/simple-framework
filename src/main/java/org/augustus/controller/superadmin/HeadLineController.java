@@ -3,6 +3,7 @@ package org.augustus.controller.superadmin;
 import org.augustus.entity.bo.HeadLine;
 import org.augustus.entity.dto.Result;
 import org.augustus.service.solo.HeadLineService;
+import org.simpleframework.core.annotation.Controller;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @author LinYongJin
  * @date 2020/8/13 15:02
  */
+@Controller
 public class HeadLineController {
 
     private HeadLineService headLineService;
