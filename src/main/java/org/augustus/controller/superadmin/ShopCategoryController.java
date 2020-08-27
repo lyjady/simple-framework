@@ -4,6 +4,7 @@ import org.augustus.entity.bo.ShopCategory;
 import org.augustus.entity.dto.Result;
 import org.augustus.service.solo.ShopCategoryService;
 import org.simpleframework.core.annotation.Controller;
+import org.simpleframework.inject.Autowird;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Controller
 public class ShopCategoryController {
 
+    @Autowird
     private ShopCategoryService shopCategoryService;
 
     public Result<Boolean> save() {

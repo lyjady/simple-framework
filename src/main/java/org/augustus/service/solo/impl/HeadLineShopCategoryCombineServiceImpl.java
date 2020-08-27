@@ -8,6 +8,7 @@ import org.augustus.service.combine.HeadLineShopCategoryCombineService;
 import org.augustus.service.solo.HeadLineService;
 import org.augustus.service.solo.ShopCategoryService;
 import org.simpleframework.core.annotation.Service;
+import org.simpleframework.inject.Autowird;
 
 import java.util.List;
 
@@ -18,8 +19,10 @@ import java.util.List;
 @Service
 public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
 
+    @Autowird
     private HeadLineService headLineService;
 
+    @Autowird
     private ShopCategoryService shopCategoryService;
 
     @Override

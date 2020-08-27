@@ -3,6 +3,7 @@ package org.simpleframework.utils;
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
@@ -119,6 +120,35 @@ public class ClassUtil {
             constructor.setAccessible(accessible);
             return constructor.newInstance();
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * 为属性注入Bean
+     *
+     * @param target 被注入的对象
+     * @param field  被注入的属性
+     * @param bean   注入的对象
+     */
+    public static void fieldInject(Object target, Field field, Object bean) {
+        fieldInject(target, field, bean, true);
+    }
+
+    /**
+     * 为属性注入Bean
+     *
+     * @param target     被注入的对象
+     * @param field      被注入的属性
+     * @param bean       注入的对象
+     * @param accessible 访问权限
+     */
+    public static void fieldInject(Object target, Field field, Object bean, boolean accessible) {
+        field.setAccessible(accessible);
+        try {
+            field.set(target, bean);
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }

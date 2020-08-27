@@ -130,6 +130,25 @@ public class BeanContainer {
     }
 
     /**
+     * 获取被指定注解修饰的类
+     *
+     * @param annotation 指定的注解类型
+     * @return
+     */
+    public Set<Class<?>> getClassByAnnotation(Class<? extends Annotation> annotation) {
+        if (beanMap.size() == 0) {
+            return null;
+        }
+        Set<Class<?>> beans = new HashSet<>();
+        for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
+            if (entry.getKey().isAnnotationPresent(annotation)) {
+                beans.add(entry.getKey());
+            }
+        }
+        return beans.size() == 0 ? null : beans;
+    }
+
+    /**
      * 获取指定类子类或者实现接口的bean
      *
      * @param interfaceOrSuper 指定的父类或者接口
@@ -143,6 +162,25 @@ public class BeanContainer {
         for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
             if (interfaceOrSuper.isAssignableFrom(entry.getKey()) && entry.getKey() != interfaceOrSuper) {
                 beans.add(entry.getValue());
+            }
+        }
+        return beans.size() == 0 ? null : beans;
+    }
+
+    /**
+     * 获取指定类子类或者实现接口的类
+     *
+     * @param interfaceOrSuper 指定的父类或者接口
+     * @return
+     */
+    public Set<Class<?>> getClassBySuper(Class<?> interfaceOrSuper) {
+        if (beanMap.size() == 0) {
+            return null;
+        }
+        Set<Class<?>> beans = new HashSet<>();
+        for (Map.Entry<Class<?>, Object> entry : beanMap.entrySet()) {
+            if (interfaceOrSuper.isAssignableFrom(entry.getKey()) && entry.getKey() != interfaceOrSuper) {
+                beans.add(entry.getKey());
             }
         }
         return beans.size() == 0 ? null : beans;

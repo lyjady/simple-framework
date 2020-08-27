@@ -4,6 +4,7 @@ import org.augustus.entity.dto.MainPageInfoDto;
 import org.augustus.entity.dto.Result;
 import org.augustus.service.combine.HeadLineShopCategoryCombineService;
 import org.simpleframework.core.annotation.Controller;
+import org.simpleframework.inject.Autowird;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class MainPageInfoController {
 
+    @Autowird
     private HeadLineShopCategoryCombineService headLineShopCategoryCombineService;
 
     public Result<MainPageInfoDto> findMagePageInfo(HttpServletRequest request, HttpServletResponse response) {

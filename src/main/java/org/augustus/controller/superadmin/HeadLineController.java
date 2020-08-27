@@ -1,9 +1,11 @@
 package org.augustus.controller.superadmin;
 
+import demo.annotation.AddressInfo;
 import org.augustus.entity.bo.HeadLine;
 import org.augustus.entity.dto.Result;
 import org.augustus.service.solo.HeadLineService;
 import org.simpleframework.core.annotation.Controller;
+import org.simpleframework.inject.Autowird;
 
 import java.util.List;
 
@@ -14,7 +16,12 @@ import java.util.List;
 @Controller
 public class HeadLineController {
 
+    @Autowird
     private HeadLineService headLineService;
+
+    public HeadLineService getHeadLineService() {
+        return headLineService;
+    }
 
     public Result<Boolean> save() {
         return headLineService.save(new HeadLine());
