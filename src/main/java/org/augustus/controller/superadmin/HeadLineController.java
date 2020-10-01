@@ -42,4 +42,8 @@ public class HeadLineController {
     public Result<List<HeadLine>> find() {
        return headLineService.find(new HeadLine(), 1, 10);
     }
+
+    public void m() {
+        System.out.println("---------");
+    }
 }

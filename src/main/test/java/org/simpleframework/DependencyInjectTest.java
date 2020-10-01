@@ -3,6 +3,7 @@ package org.simpleframework;
 import org.augustus.controller.superadmin.HeadLineController;
 import org.augustus.service.solo.HeadLineService;
 import org.junit.jupiter.api.*;
+import org.simpleframework.aop.AspectWeaver;
 import org.simpleframework.core.BeanContainer;
 import org.simpleframework.inject.DependencyInject;
 
@@ -24,5 +25,15 @@ public class DependencyInjectTest {
         new DependencyInject().doInject();
         HeadLineController headLineController = (HeadLineController) beanContainer.getBean(HeadLineController.class);
         Assertions.assertNotNull(headLineController.getHeadLineService());
+    }
+
+    @Test
+    @DisplayName("测试AOP")
+    public void aopTest() {
+        beanContainer.loadBeans("org.augustus");
+        new AspectWeaver().doAop();
+        new DependencyInject().doInject();
+        HeadLineController headLineController = (HeadLineController) beanContainer.getBean(HeadLineController.class);
+        headLineController.m();
     }
 }
