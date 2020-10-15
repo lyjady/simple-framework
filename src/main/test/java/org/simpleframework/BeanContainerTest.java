@@ -1,6 +1,6 @@
 package org.simpleframework;
 
-import org.augustus.controller.DispatcherServlet;
+import org.simpleframework.mvc.DispatcherServlet;
 import org.augustus.controller.superadmin.HeadLineController;
 import org.augustus.service.solo.HeadLineService;
 import org.augustus.service.solo.impl.HeadLineServiceImpl;
