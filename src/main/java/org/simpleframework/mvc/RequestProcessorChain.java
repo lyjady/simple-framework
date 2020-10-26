@@ -54,7 +54,7 @@ public class RequestProcessorChain {
                 }
             }
         } catch (Exception e) {
-            this.resultRender = new InternalErrorResultRender();
+            this.resultRender = new InternalErrorResultRender(e.getMessage());
             log.error("error message: {}", e.getMessage());
         }
     }

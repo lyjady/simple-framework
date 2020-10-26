@@ -23,6 +23,7 @@
           <element id="library" level="project" name="Maven: org.ow2.asm:asm:7.0" />
           <element id="library" level="project" name="Maven: org.apache.ant:ant:1.10.3" />
           <element id="library" level="project" name="Maven: org.apache.ant:ant-launcher:1.10.3" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
         </element>
       </element>
       <element id="directory" name="META-INF">

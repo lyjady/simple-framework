@@ -10,6 +10,6 @@ public class DefaultResultRender implements ResultRender {
 
     @Override
     public void render(RequestProcessorChain chain) throws Exception {
-
+        chain.getResponse().setStatus(chain.getResponseCode());
     }
 }

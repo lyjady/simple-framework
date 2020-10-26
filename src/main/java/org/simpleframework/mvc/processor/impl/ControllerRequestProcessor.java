@@ -4,15 +4,21 @@ import org.simpleframework.core.BeanContainer;
 import org.simpleframework.mvc.RequestProcessorChain;
 import org.simpleframework.mvc.annotation.RequestMapping;
 import org.simpleframework.mvc.annotation.RequestParam;
+import org.simpleframework.mvc.annotation.ResponseBody;
 import org.simpleframework.mvc.processor.RequestProcessor;
+import org.simpleframework.mvc.render.JsonResultRender;
+import org.simpleframework.mvc.render.ResourceNotFountResultRender;
+import org.simpleframework.mvc.render.ResultRender;
+import org.simpleframework.mvc.render.ViewResultRender;
 import org.simpleframework.mvc.type.ControllerMethod;
 import org.simpleframework.mvc.type.RequestPathInfo;
+import org.simpleframework.mvc.utils.ConverterUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -73,6 +79,64 @@ public class ControllerRequestProcessor implements RequestProcessor {
 
     @Override
     public boolean process(RequestProcessorChain requestProcessorChain) throws Exception {
-        return false;
+        String path = requestProcessorChain.getPath();
+        String method = requestProcessorChain.getMethod();
+        ControllerMethod controllerMethod = this.pathMap.get(new RequestPathInfo(method, path));
+        if (controllerMethod == null) {
+            requestProcessorChain.setResultRender(new ResourceNotFountResultRender(method, path));
+            return false;
+        }
+        Object result = invokeControllerMethod(controllerMethod, requestProcessorChain.getRequest());
+        setRender(result, controllerMethod, requestProcessorChain);
+        return true;
+    }
+
+
+    private Object invokeControllerMethod(ControllerMethod controllerMethod, HttpServletRequest request) {
+        Map<String, String> requestParameterMap = new HashMap<>();
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().length > 0) {
+                requestParameterMap.put(entry.getKey(), entry.getValue()[0]);
+            }
+        }
+        List<Object> methodParameter = new ArrayList<>();
+        Map<String, Class<?>> methodParameters = controllerMethod.getMethodParameters();
+        for (Map.Entry<String, Class<?>> entry : methodParameters.entrySet()) {
+            Class<?> parameterClass = entry.getValue();
+            String parameter = requestParameterMap.get(entry.getKey());
+            Object value;
+            if (parameter == null) {
+                value = ConverterUtils.primitiveNull(parameterClass);
+            } else {
+                value = ConverterUtils.convert(parameterClass, parameter);
+            }
+            methodParameter.add(value);
+        }
+        Object controller = beanContainer.getBean(controllerMethod.getControllerClass());
+        Method invokeMethod = controllerMethod.getInvokeMethod();
+        invokeMethod.setAccessible(true);
+        Object result;
+        try {
+            result = invokeMethod.invoke(controller, methodParameter.toArray());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+        return result;
+    }
+
+    private void setRender(Object result, ControllerMethod controllerMethod, RequestProcessorChain requestProcessorChain) {
+        if (result == null) {
+            return;
+        }
+        ResultRender resultRender;
+        boolean isJson = controllerMethod.getControllerClass().isAnnotationPresent(ResponseBody.class);
+        if (isJson) {
+            resultRender = new JsonResultRender(result);
+        } else {
+            resultRender = new ViewResultRender(result);
+        }
+        requestProcessorChain.setResultRender(resultRender);
     }
 }
